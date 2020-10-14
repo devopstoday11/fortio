@@ -59,6 +59,7 @@ var (
 	uiPath      string // absolute (base)
 	logoPath    string // relative
 	chartJSPath string // relative
+	cssPath     string // relative
 	debugPath   string // mostly relative
 	fetchPath   string // this one is absolute
 	// Used to construct default URL to self.
@@ -900,6 +901,7 @@ func Serve(baseurl, port, debugpath, uipath, staticRsrcDir string, datadir strin
 
 	logoPath = version.Short() + "/static/img/logo.svg"
 	chartJSPath = version.Short() + "/static/js/Chart.min.js"
+	cssPath = version.Short() + "/static/css/superhero_theme.bootstrap.min.css"
 
 	// Serve static contents in the ui/static dir. If not otherwise specified
 	// by the function parameter staticPath, we use getResourcesDir which uses the
@@ -912,6 +914,7 @@ func Serve(baseurl, port, debugpath, uipath, staticRsrcDir string, datadir strin
 		prefix := uiPath + version.Short()
 		mux.Handle(prefix+"/static/", LogAndAddCacheControl(http.StripPrefix(prefix, fs)))
 		mux.Handle(faviconPath, LogAndAddCacheControl(fs))
+		mux.Handle(cssPath, LogAndAddCacheControl(fs))
 		var err error
 		mainTemplate, err = template.ParseFiles(path.Join(staticRsrcDir, "templates/main.html"),
 			path.Join(staticRsrcDir, "templates/header.html"))

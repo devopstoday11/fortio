@@ -1,4 +1,25 @@
-{{define "header"}}<body style="background: linear-gradient(to right, #d8aa20 , #c75228);">
-<a href="https://fortio.org/" target="_blank"><img src="{{.LogoPath}}" alt="." height="69" width="45" align="right" /></a>
-<img src="{{.LogoPath}}" alt="." height="92" width="60" align="right" />
-<img src="{{.LogoPath}}" alt="istio logo" height="123" width="80" align="right" />{{end}}
+{{define "header"}}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <a class="navbar-brand" href="#">
+        <img src="{{.LogoPath}}" alt="istio logo" height="32" width="32" />
+        Φορτίο v{{.Version}}
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-items" aria-controls="navbar-items" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="" id="navbar-items">
+            <ul class="navbar-nav collapse navbar-collapse d-flex justify-content-end">
+                <li  class="nav-item active">
+                    <a class="nav-link" href="/fortio">Home</a>
+                </li>
+                <li class="nav-item" class="nav-item">
+                    <a class="nav-link" href="browse">Saved Results</a>
+                </li>
+                <li class="nav-item">    
+                    <a class="nav-link" href="data">Raw JSON</a>
+                </li>
+            </ul>   
+    </div>
+</nav>
+{{end}}    

@@ -1,81 +1,156 @@
 <!DOCTYPE html>
 <html>
-<head><title>Φορτίο v{{.Version}}</title>
+
+<head>
+  <title>Φορτίο v{{.Version}}</title>
   <script src="{{.ChartJSPath}}"></script>
   <script src="{{.Version}}/static/js/fortio_chart.js"></script>
-  <link rel="icon" href="../favicon.ico"/>
+  <link rel="icon" href="../favicon.ico" />
+  <link rel="stylesheet" href="{{.Version}}/static/css/superhero_theme.bootstrap.min.css">
+
 </head>
 {{template "header" .}}
-<h1>Φορτίο (fortio) v{{.Version}}{{if not .DoLoad}} control UI{{end}}</h1>
-<p>Up for {{.UpTime}} (since {{.StartTime}}).
-{{if .DoLoad}}
-<p>{{.Labels}} {{.TargetURL}}
+<div class="container">
+<div class="jumbotron">
+  <!-- <h1 class="display-3">
+    {{if not .DoLoad}} control UI{{end}}
+  </h1> -->
+  <h1 class="display-6">Up for {{.UpTime}} (since {{.StartTime}})</h1>
+  {{if .DoLoad}}
+  <p>{{.Labels}} {{.TargetURL}}</p>
+  <!-- </div> -->
+</div>
+
+<!-- </div> -->
 <div id="running">
-  Running load test... Results pending...
-  <br />
-  <progress id="progressBar" max="100" value="0" style="width: 100%"></progress>
+  <div class="card">
+    Running load test... Results pending...
+  </div>
+  <div class="progress">
+    <!-- <div class="progress-bar progress-bar-striped" id="progressBar" role="progressbar" aria-valuenow="0"
+      aria-valuemin="0" aria-valuemax="100"></div> -->
+    <progress class="progress-bar progress-bar-striped" id="progress" max="100" value="0" style="width: 100%"></progress>
+  </div>
+  
   <br />
   <button type="submit" onclick='javascript:fetch("./?stop=Stop&runid={{.RunID}}");'>Interrupt</button>
 </div>
-<script>runTestForDuration({{.TestExpectedDurationSeconds}})</script>
-<div class="chart-container" id="cc1" style="position: relative; height:75vh; width:98vw; display:none;">
-  <canvas style="background-color: #fff;" id="chart1"></canvas>
+<script>runTestForDuration({{.TestExpectedDurationSeconds }})</script>
+<div class="card">
+  <div class="chart-container card-body" id="cc1" style="position: relative; width: 80vw; height:75vh; display:none;">
+    <canvas style="background-color: #fff;" id="chart1"></canvas>
+  </div>
 </div>
-<div id="update" style="visibility: hidden">
+<div id="update" style="visibility: hidden" class="card mt-1 p-1">
   <form id="updtForm" action="javascript:updateChart()">
-    <input type="submit" value="Update:" />
-    Time axis min <input type="text" name="xmin" size="5" /> ms,
-    max <input type="text" name="xmax" size="5" /> ms,
-    logarithmic:<input name="xlog" type="checkbox" onclick="updateChart()" />.
-    Count axis logarithmic:<input name="ylog" type="checkbox" onclick="updateChart()" />
-  </form>
+    <div class="row justify-content-between">
+      <div>
+        <label for="xmin">Time axis min</label> <input type="text" id="xmin" name="xmin" size="5" /> ms,
+        <label for="xmax">Max</label> <input type="text" id="xmax" name="xmax" size="5" /> ms,
+        <label for="xlog">logarithmic</label> <input name="xlog" type="checkbox" onclick="updateChart()" />.
+        <label for="ylog">Count axis logarithmic</label> <input name="ylog" type="checkbox" onclick="updateChart()" />
+      </div>
+      <div>
+        <input type="submit" class="btn btn-primary" value="Update" />
+      </div>
+    </div>
+
+</div>
+</form>
 </div>
 <pre>{{else}}
 {{if .DoStop}}
 <p>Stoping runs as per request.</p>
 {{else}}
-<form>
-  <div>
-    Title/Labels: <input type="text" name="labels" size="40" value="Fortio" /> (empty to skip title)<br />
-    URL: <input type="text" name="url" size="80" value="http://{{.URLHostPort}}/echo?delay=250us:30,5ms:5&status=503:0.5,429:1.5" /> <br />
-    QPS: <input type="text" name="qps" size="6" value="1000" />
-    Duration: <input id="duration" type="text" name="t" size="6" value="3s" />
-    or run until interrupted:<input type="checkbox" name="t" onchange="toggleDuration(this)" />
-    or run for exactly <input type="text" name="n" size="6" value="" /> calls. <br />
-    Threads/Simultaneous connections: <input type="text" name="c" size="6" value="8" /> <br />
-    Jitter:<input type="checkbox" name="jitter" /> <br />
-    Percentiles: <input type="text" name="p" size="20" value="50, 75, 90, 99, 99.9" /> <br />
-    Histogram Resolution: <input type="text" name="r" size="8" value="0.0001" /> <br />
-    Headers: <br />
-  {{ range $name, $vals := .Headers }}{{range $val := $vals}}
-    <input type="text" name="H" size=40 value="{{$name}}: {{ $val }}" /> <br />
-  {{end}}{{end}} <!-- 3 extra header lines, TODO(#283): add a JS 'more headers' button -->
-    <input type="text" name="H" size=40 value="" /> <br />
-    <input type="text" name="H" size=40 value="" /> <br />
-    <input type="text" name="H" size=40 value="" /> <br />
-    <button type="button" onclick="addCustomHeader()">+</button>
-    <br />
-    Payload:<br /><textarea name="payload" rows="5" cols="75"></textarea><br />
-    Load using:<br />
-    http: <input type="radio" name="runner" value="http" checked/>
-    (https insecure:<input type="checkbox" name="https-insecure" />,
-    standard go client instead of fastclient:<input type="checkbox" name="stdclient"/>,
-    resolve: <input type="text" name="resolve" size="12" value="" />)
-    <br />&nbsp;&nbsp;or<br />
-    grpc: <input type="radio" name="runner" value="grpc"/>
-    (grpc secure transport (tls):<input type="checkbox" name="grpc-secure" />,
-    using ping backend:<input type="checkbox" name="ping" />,
-    ping delay: <input type="text" name="grpc-ping-delay" size="6" value="0" />) <br />
-    JSON output:<input type="checkbox" name="json" />,
-    Save output:<input type="checkbox" name="save" checked /> <br />
-    <input type="submit" name="load" value="Start"/>
-  </div>
-</form>
-<p><i>Or</i></p>
-<div>
-  Browse <a href='browse'>saved results</a> (or <a href="data/">raw JSON</a>)
+
+<div class="card">
+  
+    <form>
+        <div class="row">
+          <div class="col col-6">
+            <div class="form-group">
+              <label for="labels">Title/Labels</label> <input class="form-control" id="labels" type="text" name="labels" size="40" value="Fortio" /> (empty to skip title)
+            </div>
+            <div class="form-group">
+              <label for="url">URL</label><input type="text" class="form-control" id="url" name="url"  size="80" value="http://{{.URLHostPort}}/echo?delay=250us:30,5ms:5&status=503:0.5,429:1.5" /> <br />
+            </div>
+            <div class="form-group">
+              <label for="qps">QPS</label><input type="text" class="form-control" id="qps" name="qps"   size="6" value="1000" />
+            </div>
+
+            <div class="form-group">
+              <label for="duration">Duration</label><input class="form-control" id="duration" name="duration"  type="text" size="6" value="3s" />
+            </div>
+
+            <div class="form-group">
+              <label for="t">or run until interrupted</label><input class="form-control" type="checkbox" id="t" name="t" onchange="toggleDuration(this)" />
+            </div>
+
+            <div class="form-group">
+              <label for="n">or run for exactly</label> <input class="form-control" type="text" id="n"  name="n" size="6" value="" /> calls. <br />
+            </div>
+
+            <!--  -->
+            <div class="form-group">
+                <label for="c">Threads/Simultaneous connections</label><input  class="form-control" type="text" name="c" id="c" size="6" value="8" />
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                <label for="jitter-switch">Jitter</label>
+                <input class="custom-control-input" type="checkbox" name="jitter" id="jitter-switch" />
+              </div>
+            </div>
+
+          </div>
+
+        <div class="col col-6">
+          <div class="form-group">
+            <label for="p">Percentiles</label>
+            <input type="text" name="p" id="p" size="20" value="50, 75, 90, 99, 99.9" />
+          </div>
+
+          <div class="form-group">
+            Histogram Resolution: <input type="text" name="r" size="8" value="0.0001" />
+          </div>
+
+          <div class="form-group">
+            Headers: <br />
+          {{ range $name, $vals := .Headers }}{{range $val := $vals}}
+            <input type="text" name="H" size=40 value="{{$name}}: {{ $val }}" /> <br />
+          {{end}}{{end}} <!-- 3 extra header lines, TODO(#283): add a JS 'more headers' button -->
+            <input type="text" name="H" size=40 value="" /> <br />
+            <input type="text" name="H" size=40 value="" /> <br />
+            <input type="text" name="H" size=40 value="" /> <br />
+            <button type="button" onclick="addCustomHeader()">+</button>
+            <br />
+            Payload:<br /><textarea name="payload" rows="5" cols="35"></textarea><br />
+            Load using:<br />
+            http: <input type="radio" name="runner" value="http" checked/>
+            (https insecure:<input type="checkbox" name="https-insecure" />,
+            standard go client instead of fastclient:<input type="checkbox" name="stdclient"/>,
+            resolve: <input type="text" name="resolve" size="12" value="" />)
+            <br />&nbsp;&nbsp;or<br />
+            grpc: <input type="radio" name="runner" value="grpc"/>
+            (grpc secure transport (tls):<input type="checkbox" name="grpc-secure" />,
+            using ping backend:<input type="checkbox" name="ping" />,
+            ping delay: <input type="text" name="grpc-ping-delay" size="6" value="0" />) <br />
+            JSON output:<input type="checkbox" name="json" />,
+            Save output:<input type="checkbox" name="save" checked /> <br />
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <input type="submit"  class="btn btn-primary" name="load" value="Start"/>
+      </div>
+    </form>
 </div>
-<p><i>Or</i></p>
+<!-- <p><i>Or</i></p> -->
+<!-- <div>
+  Browse <a href='browse'>saved results</a> (or <a href="data/">raw JSON</a>)
+</div> -->
+<!-- <p><i>Or</i></p> -->
 <form action="javascript:document.location += 'fetch/' + document.getElementById('uri').value">
   <div>
     Debug fetch http://<input type="text" id="uri" name="uri" value="" size=50/>
@@ -98,6 +173,7 @@ and <a href="flags">Command line flags</a>
   </div>
 </form>
 {{end}}
+</div>
 </body>
 </html>
 {{end}}

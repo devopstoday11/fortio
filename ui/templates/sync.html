@@ -1,25 +1,43 @@
-<!DOCTYPE html><html><head><title>Φορτίο v{{.Version}}</title>
-<script src="{{.Version}}/static/js/fortio_chart.js"></script>
-<link rel="icon" href="../favicon.ico" />
-<style>
-.checkmark {
-  text-shadow: 2px 1px #000;
-  color: olive;
-  font-size: 1.4em;
-}
-</style>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Φορτίο v{{.Version}}</title>
+  <script src="{{.Version}}/static/js/fortio_chart.js"></script>
+  <link rel="icon" href="../favicon.ico" />
+  <link rel="stylesheet" href="{{.Version}}/static/css/superhero_theme.bootstrap.min.css">
+
+  <style>
+    .checkmark {
+      text-shadow: 2px 1px #000;
+      color: olive;
+      font-size: 1.4em;
+    }
+  </style>
 </head>
 {{template "header" .}}
-<h1>Φορτίο (fortio) v{{.Version}} syncing</h1>
-<p>Syncing {{.URL}}
-<progress id="progressBar" style="width: 100%"></progress>
+<div class="container">
+  <div class="jumbotron">
+    <h1 class="display-6">Syncing</h1>
+    <p class="lead">{{.URL}}</p>
+  </div>
+</div>
+
+
+<!-- <progress id="progressBar" style="width: 100%"></progress> -->
+
+<div class="progress">
+  <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+</div>
+</div>
 <script>
-function setPB(val, max = null) {
-  var pb = document.getElementById('progressBar')
-  pb.value = val
-  if (max) {
-    pb.max = max
+  function setPB(val, max = null) {
+    var pb = document.getElementById('progressBar')
+    pb.value = val
+    if (max) {
+      pb.max = max
+    }
   }
-}
 </script>
 <br />
