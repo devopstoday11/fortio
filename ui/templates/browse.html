@@ -3,22 +3,9 @@
 <link rel="icon" href="../favicon.ico" />
 <link rel="stylesheet" href="{{.Version}}/static/css/tiny.css">
 <link rel="stylesheet" href="{{.Version}}/static/css/overrides.css">
-
-<!-- <style>
-a:link {
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-h1 {
-  font-size: 120%;
-}
-</style> -->
 </head>
 <body class="container">
 {{template "header" .}}
-<div class="container">  
 <h1>Φορτίο (fortio) v{{.Version}}{{.Extra}}</h1>
 <script src="{{.Version}}/static/js/fortio_chart.js"></script>
 <script>
@@ -153,7 +140,5 @@ fortio_load(files.value)
 </script>
 {{end}}
 <p>Go to <a href='./'>Top</a>.</p>
-    
-</div>
 </body>
 </html>
