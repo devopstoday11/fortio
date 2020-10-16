@@ -73,13 +73,13 @@
 <div class="card">
   
     <form>
-      <div class="row">
-          <input type="submit"  class="btn btn-primary column column-offset-90" name="load" value="Start"/>
-        </div>
+        <div class="row">
+            <input type="submit"  class="btn btn-primary column column-20" style="margin: 0 0 10px 10px;" name="load" value="Start"/>
+          </div>
         <div class="row">
           <div class="column">
             <div class="form-group">
-              <label for="labels">Title/Labels</label> <input class="form-control" id="labels" type="text" name="labels" size="40" value="Fortio" /> (empty to skip title)
+              <label for="labels">Title/Labels</label> <input placeholder="Leave empty to skip" class="form-control" id="labels" type="text" name="labels" size="40" value="Fortio" />
             </div>
             <div class="form-group">
               <label for="url">URL</label><input type="text" class="form-control" id="url" name="url"  size="80" value="http://{{.URLHostPort}}/echo?delay=250us:30,5ms:5&status=503:0.5,429:1.5" /> <br />
