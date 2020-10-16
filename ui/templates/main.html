@@ -15,9 +15,10 @@
 <h1 class="display-6">
   Load Test 
 </h1>
-<p>Up for <strong>{{.UpTime}}</strong> (since {{.StartTime}})</p>
-{{if .DoLoad}} <p>{{.Labels}} {{.TargetURL}}</p>
-
+<p>
+<span>Up for <strong>{{.UpTime}}</strong> (since {{.StartTime}})</span>
+{{if .DoLoad}} <span style="margin-left:10px"><strong>Title:</strong> {{.Labels}} <strong>Url:</strong> {{.TargetURL}}</span>
+</p>
 
 <!-- </div> -->
 <div id="running">
@@ -74,7 +75,7 @@
   
     <form>
         <div class="row">
-            <input type="submit"  class="btn btn-primary column column-20" style="margin: 0 0 10px 10px;" name="load" value="Start"/>
+            <input type="submit"  class="btn btn-primary column column-20" style="margin: 0 0 10px 0" name="load" value="Start"/>
           </div>
         <div class="row">
           <div class="column">

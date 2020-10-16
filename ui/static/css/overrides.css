@@ -1,7 +1,8 @@
 .navbar {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 5px 0 0 0;
+    height: 80px;
 }
 .navbar-brand {
     border-radius: 3px;
