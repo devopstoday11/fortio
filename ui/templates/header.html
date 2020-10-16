@@ -1,9 +1,9 @@
 {{define "header"}}
-<nav class="navbar container">
+<nav class="navbar">
     <ul class="navbar-items row">
         <li class="nav-item column column-80" >
-            <a class="navbar-brand" id="fortio-nav-logo" href="/fortio" style="display: flex; align-content: center; align-items: center;">
-                <span class="nav-logo" id="fortio-logo" style="background-color: #ff7b25; height: 48px; width: 48px; display: flex; align-items: center; position: relative; overflow: hidden; border-radius: 10px; border: 1px solid peachpuff;">
+            <a class="navbar-brand" id="fortio-nav-logo" href="/fortio" style="display: flex; align-content: center; align-items: flex-end;">
+                <span class="nav-logo" id="fortio-logo">
                     <div class="" style="background-image: url({{.LogoPath}}); height: 36px; width: 36px; background-repeat: no-repeat; background-size: contain; position: absolute; top: 4px; left: 6px;"></div>
                     <div class="" style="background-image: url({{.LogoPath}}); height: 28px; width: 28px; background-repeat: no-repeat; background-size: contain; position: absolute; top: 4px; left: 18px; opacity: 0.8"></div>
                     <div class="" style="background-image: url({{.LogoPath}}); height: 20px; width: 20px; background-repeat: no-repeat; background-size: contain; position: absolute; top: 4px; left: 28px; opacity: 0.4"></div>
@@ -14,7 +14,7 @@
         <li class="nav-item column column-10">
             <a class="nav-link" href="browse">Results</a>
         </li>
-        <li class="nav-item column column-10">    
+        <li class="nav-item column column-20">    
             <a class="nav-link" href="data">Raw JSON</a>
         </li>
     </ul>   

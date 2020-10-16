@@ -11,12 +11,13 @@
 
 </head>
 {{template "header" .}}
-<div class="container">
-<div class="jumbotron">
-  <h1 class="display-6">Up for {{.UpTime}} (since {{.StartTime}})</h1>
-  {{if .DoLoad}}
-  <p>{{.Labels}} {{.TargetURL}}</p>
-</div>
+<body class="container">
+<h1 class="display-6">
+  Load Test 
+</h1>
+<p>Up for <strong>{{.UpTime}}</strong> (since {{.StartTime}})</p>
+{{if .DoLoad}} <p>{{.Labels}} {{.TargetURL}}</p>
+
 
 <!-- </div> -->
 <div id="running">
@@ -187,7 +188,6 @@ and <a href="flags">Command line flags</a>
   </div>
 </form>
 {{end}}
-</div>
 </body>
 </html>
 {{end}}

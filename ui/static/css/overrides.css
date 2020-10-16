@@ -1,9 +1,9 @@
 .navbar {
     display: flex;
     justify-content: space-between;
+    padding: 10px 0;
 }
 .navbar-brand {
-    /* border: 1px solid grey   ; */
     border-radius: 3px;
 }
 .navbar-items {
@@ -12,4 +12,15 @@
 .nav-item.column {
     display: inherit;
 }
-
+.nav-logo {
+    box-shadow: 1px 1px 3px 1px #ccc;
+    background-color: #ff7b25;
+    top: 5px;
+    height: 48px; 
+    width: 48px; 
+    display: flex; 
+    align-items: center; 
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 10px;
+}
