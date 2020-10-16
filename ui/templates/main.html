@@ -6,19 +6,16 @@
   <script src="{{.ChartJSPath}}"></script>
   <script src="{{.Version}}/static/js/fortio_chart.js"></script>
   <link rel="icon" href="../favicon.ico" />
-  <link rel="stylesheet" href="{{.Version}}/static/css/superhero_theme.bootstrap.min.css">
+  <link rel="stylesheet" href="{{.Version}}/static/css/tiny.css">
+  <link rel="stylesheet" href="{{.Version}}/static/css/overrides.css">
 
 </head>
 {{template "header" .}}
 <div class="container">
 <div class="jumbotron">
-  <!-- <h1 class="display-3">
-    {{if not .DoLoad}} control UI{{end}}
-  </h1> -->
   <h1 class="display-6">Up for {{.UpTime}} (since {{.StartTime}})</h1>
   {{if .DoLoad}}
   <p>{{.Labels}} {{.TargetURL}}</p>
-  <!-- </div> -->
 </div>
 
 <!-- </div> -->
@@ -44,15 +41,24 @@
 <div id="update" style="visibility: hidden" class="card mt-1 p-1">
   <form id="updtForm" action="javascript:updateChart()">
     <div class="row justify-content-between container">
-      <div>
-        <label for="xmin">Time axis min</label> <input type="text" id="xmin" name="xmin" size="5" /> ms,
-        <label for="xmax">Max</label> <input type="text" id="xmax" name="xmax" size="5" /> ms,
-        <label for="xlog">logarithmic</label> <input name="xlog" type="checkbox" onclick="updateChart()" />.
-        <label for="ylog">Count axis logarithmic</label> <input name="ylog" type="checkbox" onclick="updateChart()" />
+      <div class="row">
+        <div class="column">
+          <label for="xmin">Time axis min (ms)</label> <input type="text" id="xmin" name="xmin" size="5" />
+        </div>
+        <div class="column">
+          <label for="xmax">Max (ms)</label> <input type="text" id="xmax" name="xmax" size="5" />
+        </div>
+        <div class="column">
+          <label for="xlog">logarithmic</label> <input name="xlog" type="checkbox" onclick="updateChart()" />.
+        </div>
+        <div class="column">
+          <label for="ylog">Count axis logarithmic</label> <input name="ylog" type="checkbox" onclick="updateChart()" />
+        </div>
+        <div  class="column">
+            <input type="submit" class="btn btn-primary" value="Update" />
+          </div>
       </div>
-      <div>
-        <input type="submit" class="btn btn-primary" value="Update" />
-      </div>
+      
     </div>
 
 </div>
@@ -67,7 +73,7 @@
   
     <form>
         <div class="row">
-          <div class="col col-6">
+          <div class="column">
             <div class="form-group">
               <label for="labels">Title/Labels</label> <input class="form-control" id="labels" type="text" name="labels" size="40" value="Fortio" /> (empty to skip title)
             </div>
@@ -101,21 +107,27 @@
                 <input class="custom-control-input" type="checkbox" name="jitter" id="jitter-switch" />
               </div>
             </div>
-
+            <div class="form-group">
+                <label for="r">Histogram Resolution</label>
+                <input type="text" name="r" size="8" value="0.0001" />
+              </div>
+            
+            <div class="form-group">
+                <label for="r">Histogram Resolution</label>
+                <input type="text" name="r" size="8" value="0.0001" />
+              </div>
           </div>
 
-        <div class="col col-6">
+        <div class="column">
           <div class="form-group">
-            <label for="p">Percentiles</label>
-            <input type="text" name="p" id="p" size="20" value="50, 75, 90, 99, 99.9" />
-          </div>
+              <label for="p">Percentiles</label>
+              <input type="text" name="p" id="p" size="20" value="50, 75, 90, 99, 99.9" />
+            </div>
+
+          
 
           <div class="form-group">
-            Histogram Resolution: <input type="text" name="r" size="8" value="0.0001" />
-          </div>
-
-          <div class="form-group">
-            Headers: <br />
+            <label for="headers">Headers</label>
           {{ range $name, $vals := .Headers }}{{range $val := $vals}}
             <input type="text" name="H" size=40 value="{{$name}}: {{ $val }}" /> <br />
           {{end}}{{end}} <!-- 3 extra header lines, TODO(#283): add a JS 'more headers' button -->
@@ -124,17 +136,19 @@
             <input type="text" name="H" size=40 value="" /> <br />
             <button type="button" onclick="addCustomHeader()">+</button>
             <br />
-            Payload:<br /><textarea name="payload" rows="5" cols="35"></textarea><br />
-            Load using:<br />
+            <label for="headers">Payload</label><textarea name="payload" rows="5" cols="35"></textarea><br />
+            <p>
+              load using
+            </p>
             http: <input type="radio" name="runner" value="http" checked/>
-            (https insecure:<input type="checkbox" name="https-insecure" />,
+            https insecure:<input type="checkbox" name="https-insecure" />,
             standard go client instead of fastclient:<input type="checkbox" name="stdclient"/>,
-            resolve: <input type="text" name="resolve" size="12" value="" />)
+            resolve: <input type="text" name="resolve" size="12" value="" />
             <br />&nbsp;&nbsp;or<br />
             grpc: <input type="radio" name="runner" value="grpc"/>
-            (grpc secure transport (tls):<input type="checkbox" name="grpc-secure" />,
+            grpc secure transport (tls):<input type="checkbox" name="grpc-secure" />,
             using ping backend:<input type="checkbox" name="ping" />,
-            ping delay: <input type="text" name="grpc-ping-delay" size="6" value="0" />) <br />
+            ping delay: <input type="text" name="grpc-ping-delay" size="6" value="0" /> <br />
             JSON output:<input type="checkbox" name="json" />,
             Save output:<input type="checkbox" name="save" checked /> <br />
 
@@ -142,7 +156,7 @@
         </div>
       </div>
       <div class="row">
-        <input type="submit"  class="btn btn-primary" name="load" value="Start"/>
+        <input type="submit"  class="btn btn-primary column column-offset-90" name="load" value="Start"/>
       </div>
     </form>
 </div>

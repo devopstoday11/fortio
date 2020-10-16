@@ -1,0 +1,15 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+}
+.navbar-brand {
+    /* border: 1px solid grey   ; */
+    border-radius: 3px;
+}
+.navbar-items {
+    align-items: baseline;
+}
+.nav-item.column {
+    display: inherit;
+}
+
